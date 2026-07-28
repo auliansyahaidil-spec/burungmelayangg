@@ -350,3 +350,50 @@ gameLoop();
 
 </body>
 </html>
+// 1. Inisialisasi AudioContext
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+// 2. Fungsi untuk Suara Kepakan Sayap (Flap) - Synth Frekuensi Tinggi Singkat
+function playFlapSound() {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    osc.type = 'sine';
+    // Meluncurkan pitch ke atas dengan cepat
+    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.08);
+    
+    // Atur volume (fade out cepat)
+    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.08);
+}
+
+// 3. Fungsi untuk Suara Mati (Hit/Crash) - Pitch Drop Rendah
+function playHitSound() {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    osc.type = 'sawtooth'; // Suara agak kasar/retro
+    // Meluncurkan pitch ke bawah (jatuh/menabrak)
+    osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.25);
+    
+    gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.25);
+}
+
+// Contoh Pemanggilan:
+// Saat tombol spasi atau layar ditekan: playFlapSound();
+// Saat burung menabrak rintangan: playHitSound();

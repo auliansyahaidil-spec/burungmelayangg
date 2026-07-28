@@ -35,10 +35,12 @@
 </div>
 
 <script>
+const logoImg = new Image();
+logoImg.src = 'logo.png';
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// ==========================================
+==========================================
 // KONTROL & EVENT LISTENERS
 // ==========================================
 let frameCount = 0;
@@ -252,6 +254,9 @@ function drawBackground() {
     // Garis Rumput di Tanah
     ctx.fillStyle = "#27ae60";
     ctx.fillRect(0, canvas.height - 50, canvas.width, 10);
+
+    // Menampilkan logo
+    ctx.drawImage(logoImg, 70, 80, 220, 90);
 }
 
 // ==========================================
